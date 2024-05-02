@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<items>
+    <item id="1" name="Android" description="Mobile operating system" rating="4.5"/>
+    <item id="2" name="Cupcake" description="Delicious dessert" rating="4.7"/>
+    <item id="3" name="Donut" description="Yummy treat" rating="4.2"/>
+</items>
