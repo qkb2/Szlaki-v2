@@ -2,12 +2,15 @@ package com.example.listdetailtest
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -98,8 +102,12 @@ fun ListDetailPaneScaffoldFull() {
         detailPane = {
             AnimatedPane(Modifier) {
                 // Show the detail pane content if selected item is available
-                selectedItem?.let { item ->
-                    TrailDetails(item, items)
+                if (selectedItem == null) {
+                    selectedItem = TrailItem(0)
+                }
+                TrailDetails(selectedItem!!, items) { id ->
+                    selectedItem = id
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                 }
             }
         },
@@ -134,38 +142,65 @@ fun TrailList(
 }
 
 @Composable
-fun TrailDetails(item: TrailItem, items: List<Trail>) {
-    val trail = items[item.id]
-    Card {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Details page for ${trail.name}",
-                style = MaterialTheme.typography.headlineLarge,
-            )
-            Spacer(Modifier.size(16.dp))
-            Text(
-                text = "Description: ${trail.description}"
-            )
-            Spacer(Modifier.size(8.dp))
-            Text(
-                text = "Rating: ${trail.rating}"
-            )
-            Spacer(Modifier.size(8.dp))
-            Text(
-                text = "Phases:",
-                fontWeight = FontWeight.Bold
-            )
-            trail.phases.forEach { phase ->
-                Text(
-                    text = "- ${phase.name}: ${phase.description}"
-                )
+fun TrailDetails(itemProvided: TrailItem, items: List<Trail>, onSwipe: (TrailItem) -> Unit) {
+    var item = itemProvided
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures { _, delta ->
+                    Log.w("MY_TAG", "ID: " + item.id.toString())
+                    if (delta < 0) {
+                        if (item.id < items.size - 1) {
+                            val id = item.id + 1
+                            Log.w("MY_TAG", "DELTA-: $delta")
+                            item = TrailItem(id)
+                            onSwipe(item)
+
+                        }
+                    } else if (delta > 0) {
+                        if (item.id > 0) {
+                            val id = item.id - 1
+                            Log.w("MY_TAG", "DELTA+: $delta")
+                            item = TrailItem(id)
+                            onSwipe(item)
+                        }
+                    }
+                }
             }
-            Spacer(Modifier.size(8.dp))
-            Stopwatch()
+    ) {
+        val trail = items[item.id]
+        Card {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Details page for ${trail.name}",
+                    style = MaterialTheme.typography.headlineLarge,
+                )
+                Spacer(Modifier.size(16.dp))
+                Text(
+                    text = "Description: ${trail.description}"
+                )
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    text = "Rating: ${trail.rating}"
+                )
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    text = "Phases:",
+                    fontWeight = FontWeight.Bold
+                )
+                trail.phases.forEach { phase ->
+                    Text(
+                        text = "- ${phase.name}: ${phase.description}"
+                    )
+                }
+                Spacer(Modifier.size(8.dp))
+                Stopwatch()
+            }
         }
     }
 }
