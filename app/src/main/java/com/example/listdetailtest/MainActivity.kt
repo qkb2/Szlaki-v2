@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -20,12 +21,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
@@ -64,6 +73,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            // TODO: menu screen and loading animation
             ListDetailPaneScaffoldFull()
         }
     }
@@ -75,7 +85,7 @@ class MainActivity : ComponentActivity() {
 fun ListDetailPaneScaffoldFull() {
     val context = LocalContext.current
     val items = remember { loadItemsFromXml(context) }
-    // Currently selected item
+    // Currently selected item (trail)
     var selectedItem: TrailItem? by rememberSaveable(stateSaver = TrailItem.Saver) {
         mutableStateOf(null)
     }
@@ -84,38 +94,96 @@ fun ListDetailPaneScaffoldFull() {
     val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
 
     BackHandler(navigator.canNavigateBack()) {
+        // TODO: funny atypical back handler
         navigator.navigateBack()
     }
 
-    ListDetailPaneScaffold(
-        directive = navigator.scaffoldDirective,
-        value = navigator.scaffoldValue,
-        listPane = {
-            AnimatedPane(Modifier) {
-                TrailList(
-                    onItemClick = { id ->
-                        // Set current item
-                        selectedItem = id
-                        // Display the detail pane
-                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                    },
-                    items
-                )
+    // State for showing/hiding the drawer
+    var isDrawerOpen by remember { mutableStateOf(false) }
+
+    // State for managing theme mode
+    var isDarkMode by remember { mutableStateOf(false) }
+
+    // Main layout with top app bar and drawer
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Top app bar
+        // TODO: change app bar so that it hides on some occasions
+        AppBar(
+            onHamburgerClick = { isDrawerOpen = !isDrawerOpen },
+            onNightModeClick = {
+                isDarkMode = !isDarkMode
+                val mode = if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                AppCompatDelegate.setDefaultNightMode(mode)
+            }
+        )
+
+        Row(modifier = Modifier.fillMaxSize()) {
+            // Drawer
+            // TODO: change to modal navigation drawer
+            if (isDrawerOpen) {
+                Drawer()
+            }
+
+            // List detail pane scaffold
+            ListDetailPaneScaffold(
+                directive = navigator.scaffoldDirective,
+                value = navigator.scaffoldValue,
+                listPane = {
+                    AnimatedPane(Modifier) {
+                        TrailList(
+                            onItemClick = { id ->
+                                // Set current item
+                                selectedItem = id
+                                // Display the detail pane
+                                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                            },
+                            items
+                        )
+                    }
+                },
+                detailPane = {
+                    AnimatedPane(Modifier) {
+                        // Show the detail pane content if selected item is available
+                        if (selectedItem == null) {
+                            selectedItem = TrailItem(0)
+                        }
+                        TrailDetails(selectedItem!!, items) { id ->
+                            selectedItem = id
+                            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                        }
+                    }
+                },
+            )
+        }
+
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBar(
+    onHamburgerClick: () -> Unit,
+    onNightModeClick: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = "App Title") },
+        navigationIcon = {
+            IconButton(onClick = { onHamburgerClick() }) {
+                Icon(Icons.Filled.Menu, contentDescription = "Menu")
             }
         },
-        detailPane = {
-            AnimatedPane(Modifier) {
-                // Show the detail pane content if selected item is available
-                if (selectedItem == null) {
-                    selectedItem = TrailItem(0)
-                }
-                TrailDetails(selectedItem!!, items) { id ->
-                    selectedItem = id
-                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                }
+        actions = {
+            // TODO: swap to day/night mode
+            IconButton(onClick = { onNightModeClick() }) {
+                Icon(Icons.Filled.CheckCircle, contentDescription = "Light/Dark Mode")
             }
-        },
+        }
     )
+}
+
+@Composable
+fun Drawer() {
+    Text("Drawer Content")
 }
 
 @Composable
@@ -123,7 +191,7 @@ fun TrailList(
     onItemClick: (TrailItem) -> Unit,
     items: List<Trail>
 ) {
-    LazyColumn {
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items.forEachIndexed { _, trail ->
             item {
                 TrailCard(trail, onItemClick)
@@ -222,6 +290,8 @@ fun TrailDetails(itemProvided: TrailItem, items: List<Trail>, onSwipe: (TrailIte
                 }
                 Spacer(Modifier.size(8.dp))
                 Stopwatch()
+
+                // TODO: FAB for photos
             }
         }
     }
@@ -283,6 +353,8 @@ fun Stopwatch() {
     var elapsedSeconds by remember { mutableIntStateOf(0) }
     var job by remember { mutableStateOf<Job?>(null) }
     val recordedTimes = remember { mutableStateListOf<Int>() }
+
+    // TODO: make it so that recorded times are loaded from db
 
     Column(
         modifier = Modifier
