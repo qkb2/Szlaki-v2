@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <trails>
-    <item id="1" name="Mountain Trail" description="Explore scenic mountain views" rating="4.5">
+    <item id="0" name="Mountain Trail" description="Explore scenic mountain views" rating="4.5">
         <phase name="Start" description="Starting point of the trail" />
         <phase name="Ascent" description="Climbing up the mountain" />
         <phase name="Summit" description="Reaching the mountain top" />
         <phase name="Descent" description="Descending from the mountain" />
         <phase name="Finish" description="End of the trail" />
     </item>
-    <item id="2" name="Forest Trail" description="Hike through lush forests" rating="4.2">
+    <item id="1" name="Forest Trail" description="Hike through lush forests" rating="4.2">
         <phase name="Start" description="Starting point of the trail" />
         <phase name="Exploration" description="Exploring the forest area" />
         <phase name="Scenic Spot" description="Scenic spot along the trail" />
