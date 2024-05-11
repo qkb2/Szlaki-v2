@@ -74,6 +74,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             // TODO: menu screen and loading animation
+            // TODO: use themes
             ListDetailPaneScaffoldFull()
         }
     }
@@ -94,7 +95,7 @@ fun ListDetailPaneScaffoldFull() {
     val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
 
     BackHandler(navigator.canNavigateBack()) {
-        // TODO: funny atypical back handler
+        // TODO: funny atypical back handler (probably won't do that one)
         navigator.navigateBack()
     }
 
