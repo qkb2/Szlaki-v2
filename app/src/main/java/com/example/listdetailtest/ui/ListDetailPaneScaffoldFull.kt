@@ -1,31 +1,21 @@
 package com.example.listdetailtest.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +32,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun ListDetailPaneScaffoldFull(items: List<Trail>) {
+fun ListDetailPaneScaffoldFull(items: List<Trail>, onMode: () -> Unit) {
 //    val context = LocalContext.current
 //    val items = remember { loadItemsFromXml(context) }
     // Currently selected item (trail)
@@ -68,20 +58,20 @@ fun ListDetailPaneScaffoldFull(items: List<Trail>) {
     Column(modifier = Modifier.fillMaxSize()) {
         // Top app bar
         // TODO: change app bar so that it hides on some occasions
-        AppBar(
-            onHamburgerClick = {
-                scope.launch {
-                    drawerState.apply {
-                        if (isClosed) open() else close()
-                    }
-                }
-            },
-            onNightModeClick = {
-                isDarkMode = !isDarkMode
-                val mode = if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-                AppCompatDelegate.setDefaultNightMode(mode)
-            }
-        )
+//        AppBar(
+//            onHamburgerClick = {
+//                scope.launch {
+//                    drawerState.apply {
+//                        if (isClosed) open() else close()
+//                    }
+//                }
+//            },
+//            onNightModeClick = {
+//                isDarkMode = !isDarkMode
+//                val mode = if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+//                AppCompatDelegate.setDefaultNightMode(mode)
+//            }
+//        )
 
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -129,38 +119,22 @@ fun ListDetailPaneScaffoldFull(items: List<Trail>) {
                         if (selectedItem == null) {
                             selectedItem = TrailItem(0)
                         }
-                        TrailDetails(selectedItem!!, items) { id: TrailItem ->
+                        TrailDetails(selectedItem!!, items,
+                            onSwipe = { id: TrailItem ->
                             selectedItem = id
                             navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                        }
+                        }, onHamburger = {
+                                scope.launch {
+                                    drawerState.apply {
+                                        if (isClosed) open() else close()
+                                    }
+                                }
+                        }, onMode = {onMode()})
                     }
                 },
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppBar(
-    onHamburgerClick: () -> Unit,
-    onNightModeClick: () -> Unit) {
-    TopAppBar(
-        title = { Text(text = "App Title") },
-        navigationIcon = {
-            IconButton(onClick = { onHamburgerClick() }) {
-                Icon(Icons.Filled.Menu, contentDescription = "Menu")
-            }
-        },
-        actions = {
-            // TODO: swap to day/night mode
-            IconButton(onClick = { onNightModeClick() }) {
-                Icon(Icons.Filled.CheckCircle, contentDescription = "Light/Dark Mode")
-            }
-        },
-        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-
-    )
 }
 
 val photoList: Array<Int> = arrayOf(R.drawable.trail_image_0, R.drawable.trail_image_1)

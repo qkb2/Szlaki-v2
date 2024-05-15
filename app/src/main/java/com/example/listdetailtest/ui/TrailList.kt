@@ -28,10 +28,15 @@ fun TrailList(
     onItemClick: (TrailItem) -> Unit,
     items: List<Trail>
 ) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-        items.forEachIndexed { _, trail ->
-            item {
-                TrailCard(trail, onItemClick)
+    Column {
+        Tabs {
+
+        }
+        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+            items.forEachIndexed { _, trail ->
+                item {
+                    TrailCard(trail, onItemClick)
+                }
             }
         }
     }

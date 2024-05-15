@@ -29,7 +29,13 @@ import com.example.listdetailtest.Trail
 import com.example.listdetailtest.TrailItem
 
 @Composable
-fun TrailDetails(itemProvided: TrailItem, items: List<Trail>, onSwipe: (TrailItem) -> Unit) {
+fun TrailDetails(
+    itemProvided: TrailItem,
+    items: List<Trail>,
+    onSwipe: (TrailItem) -> Unit,
+    onHamburger: () -> Unit,
+    onMode: () -> Unit
+) {
     var item = itemProvided
     Box(
         modifier = Modifier
@@ -58,6 +64,8 @@ fun TrailDetails(itemProvided: TrailItem, items: List<Trail>, onSwipe: (TrailIte
     ) {
         val trail = items[item.id]
         val context = LocalContext.current
+        // State for managing theme mode
+//        var isDarkMode by remember { mutableStateOf(false) }
 
         Scaffold(
             floatingActionButton = {
@@ -71,7 +79,18 @@ fun TrailDetails(itemProvided: TrailItem, items: List<Trail>, onSwipe: (TrailIte
                     Icon(imageVector = Icons.Filled.Add, contentDescription = "icon")
                 }
             },
-            floatingActionButtonPosition = FabPosition.End
+            floatingActionButtonPosition = FabPosition.End,
+            topBar = {
+                AppBar(
+                    onHamburgerClick = { onHamburger() },
+                    onNightModeClick = {
+//                        isDarkMode = !isDarkMode
+//                        val mode = if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+//                        AppCompatDelegate.setDefaultNightMode(mode)
+                        onMode()
+                    }
+                )
+            }
         ) {
             val whatever = it
             Card {
