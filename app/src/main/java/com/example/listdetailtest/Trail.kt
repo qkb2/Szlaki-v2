@@ -1,17 +1,29 @@
 package com.example.listdetailtest
 
 import android.content.Context
+import androidx.compose.runtime.saveable.Saver
 import org.w3c.dom.Element
 import org.xml.sax.InputSource
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
+
+class TrailItem(val id: Int) {
+    companion object {
+        val Saver: Saver<TrailItem?, Int> = Saver(
+            { it?.id },
+            ::TrailItem,
+        )
+    }
+}
 
 data class Trail(
     val id: Int,
     val name: String,
     val description: String,
     val rating: Float,
-    val phases: List<Phase> // Added list of phases
+    val phases: List<Phase>,
+    val difficulty: String,
+    val dif: Difficulty
 )
 
 data class Phase(
@@ -36,6 +48,8 @@ fun loadItemsFromXml(context: Context): List<Trail> {
         val description = itemNode.getAttribute("description")
         val rating = itemNode.getAttribute("rating").toFloat()
         val phases = mutableListOf<Phase>()
+        val difficulty = itemNode.getAttribute("difficulty")
+        val dif = if (difficulty == "easy") Difficulty.EASY else Difficulty.HARD
 
         val phaseNodes = itemNode.getElementsByTagName("phase")
         for (j in 0 until phaseNodes.length) {
@@ -45,8 +59,26 @@ fun loadItemsFromXml(context: Context): List<Trail> {
             phases.add(Phase(phaseName, phaseDescription))
         }
 
-        itemsList.add(Trail(id, name, description, rating, phases))
+        itemsList.add(Trail(id, name, description, rating, phases, difficulty, dif))
     }
 
     return itemsList
+}
+
+enum class Difficulty {
+    EASY, HARD
+}
+
+fun loadHelper(items: List<Trail>): List<List<Trail>> {
+    val easyTrails = mutableListOf<Trail>()
+    val hardTrails = mutableListOf<Trail>()
+
+    for (trail in items) {
+        when (trail.dif) {
+            Difficulty.EASY -> easyTrails.add(trail)
+            Difficulty.HARD -> hardTrails.add(trail)
+        }
+    }
+
+    return listOf(easyTrails, hardTrails)
 }

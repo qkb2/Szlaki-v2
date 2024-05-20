@@ -32,7 +32,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun ListDetailPaneScaffoldFull(items: List<Trail>, onMode: () -> Unit) {
+fun ListDetailPaneScaffoldFull(
+    items: List<Trail>, itemsByType: List<List<Trail>>, onMode: () -> Unit) {
 //    val context = LocalContext.current
 //    val items = remember { loadItemsFromXml(context) }
     // Currently selected item (trail)
@@ -56,23 +57,7 @@ fun ListDetailPaneScaffoldFull(items: List<Trail>, onMode: () -> Unit) {
 
     // Main layout with top app bar and drawer
     Column(modifier = Modifier.fillMaxSize()) {
-        // Top app bar
-        // TODO: change app bar so that it hides on some occasions
-//        AppBar(
-//            onHamburgerClick = {
-//                scope.launch {
-//                    drawerState.apply {
-//                        if (isClosed) open() else close()
-//                    }
-//                }
-//            },
-//            onNightModeClick = {
-//                isDarkMode = !isDarkMode
-//                val mode = if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-//                AppCompatDelegate.setDefaultNightMode(mode)
-//            }
-//        )
-
+        // Drawer with navigation
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -109,7 +94,7 @@ fun ListDetailPaneScaffoldFull(items: List<Trail>, onMode: () -> Unit) {
                                 // Display the detail pane
                                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                             },
-                            items
+                            items, itemsByType
                         )
                     }
                 },
@@ -137,5 +122,11 @@ fun ListDetailPaneScaffoldFull(items: List<Trail>, onMode: () -> Unit) {
     }
 }
 
-val photoList: Array<Int> = arrayOf(R.drawable.trail_image_0, R.drawable.trail_image_1)
+val photoList: Array<Int> = arrayOf(
+    R.drawable.trail_image_0,
+    R.drawable.trail_image_1,
+    R.drawable.trail_image_0,
+    R.drawable.trail_image_1,
+    R.drawable.trail_image_0,
+    R.drawable.trail_image_1)
 

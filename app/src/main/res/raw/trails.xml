@@ -1,17 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <trails>
-    <item id="0" name="Mountain Trail" description="Explore scenic mountain views" rating="4.5">
-        <phase name="Start" description="Starting point of the trail" />
-        <phase name="Ascent" description="Climbing up the mountain" />
-        <phase name="Summit" description="Reaching the mountain top" />
-        <phase name="Descent" description="Descending from the mountain" />
-        <phase name="Finish" description="End of the trail" />
+    <item id="0" name="Mountain Trail" description="Explore scenic mountain views with challenging ascents and breathtaking vistas. This trail is perfect for experienced hikers looking for an adventure." rating="4.5" difficulty="hard">
+        <phase name="Start" description="Starting point of the trail, where hikers can gather information and prepare for the journey ahead." />
+        <phase name="Forest Path" description="A shaded path through dense forest, offering cool respite before the climb." />
+        <phase name="Ascent" description="Climbing up the mountain, with steep and rocky paths that require careful navigation." />
+        <phase name="Rest Point" description="A designated rest point with panoramic views, ideal for taking a break and enjoying the scenery." />
+        <phase name="Summit" description="Reaching the mountain top, where hikers are rewarded with stunning, uninterrupted views of the surrounding landscape." />
+        <phase name="Ridge Walk" description="A walk along the mountain ridge, providing a unique perspective and additional viewpoints." />
+        <phase name="Descent" description="Descending from the mountain, a challenging trek down that tests endurance and stability." />
+        <phase name="Finish" description="End of the trail, where hikers can relax and reflect on their journey." />
     </item>
-    <item id="1" name="Forest Trail" description="Hike through lush forests" rating="4.2">
-        <phase name="Start" description="Starting point of the trail" />
-        <phase name="Exploration" description="Exploring the forest area" />
-        <phase name="Scenic Spot" description="Scenic spot along the trail" />
-        <phase name="Finish" description="End of the trail" />
+    <item id="1" name="Forest Trail" description="Hike through lush forests filled with diverse flora and fauna. This easy trail offers a peaceful and refreshing experience for nature lovers." rating="4.2" difficulty="easy">
+        <phase name="Start" description="Starting point of the trail, featuring a map and information about the forest." />
+        <phase name="Forest Canopy" description="Walking under a dense canopy of trees, providing shade and a tranquil atmosphere." />
+        <phase name="Exploration" description="Exploring various parts of the forest, with opportunities to see wildlife and unique plant species." />
+        <phase name="River Crossing" description="Crossing a small river using a quaint wooden bridge, adding a bit of adventure to the hike." />
+        <phase name="Scenic Spot" description="A designated scenic spot with benches and informational signs about the surrounding ecosystem." />
+        <phase name="Picnic Area" description="A lovely picnic area equipped with tables and views of the forest." />
+        <phase name="Finish" description="End of the trail, where hikers can rest and enjoy the peaceful environment." />
     </item>
-    <!-- Add more trails with phases if needed -->
+    <item id="2" name="Desert Trail" description="Experience the vast desert landscape with its unique beauty, challenging dunes, and tranquil oases. Perfect for those seeking a hard and rewarding adventure." rating="4.7" difficulty="hard">
+        <phase name="Start" description="Starting point of the trail, providing essential information and guidelines for desert hiking." />
+        <phase name="Sandy Path" description="Walking along a sandy path, with the heat of the desert sun and the vast open space." />
+        <phase name="Dune Climb" description="Climbing up the towering sand dunes, a physically demanding yet exhilarating experience." />
+        <phase name="Oasis Rest" description="Resting at a picturesque oasis, with palm trees and a refreshing water source." />
+        <phase name="Rocky Path" description="Navigating a rocky path with unique rock formations and desert plants." />
+        <phase name="Desert Plateau" description="Walking across a flat desert plateau, offering expansive views of the horizon." />
+        <phase name="Sunset View" description="Enjoying the breathtaking desert sunset, with the sky painted in vibrant colors." />
+        <phase name="Finish" description="End of the trail, marking the completion of the challenging desert journey." />
+    </item>
+    <item id="3" name="Coastal Trail" description="Walk along the beautiful coastline, with stunning ocean views, beach walks, and tide pools. This easy trail is ideal for a relaxing and scenic hike." rating="4.3" difficulty="easy">
+        <phase name="Start" description="Starting point of the trail, where hikers can get a map and information about the coastal environment." />
+        <phase name="Beach Walk" description="Walking along the sandy beach, with the sound of waves and seagulls creating a serene atmosphere." />
+        <phase name="Coastal Forest" description="A short trek through a coastal forest, providing shade and a different perspective of the coastline." />
+        <phase name="Cliffside Path" description="Path along the cliffs, offering dramatic views of the ocean and the rugged coastline." />
+        <phase name="Tide Pools" description="Exploring tide pools, with opportunities to see marine life up close." />
+        <phase name="Picnic Area" description="A picnic area overlooking the ocean, perfect for a meal with a view." />
+        <phase name="Seaside Rest" description="A rest area by the sea, with benches and informational signs about the coastal ecosystem." />
+        <phase name="Finish" description="End of the trail, where hikers can relax and enjoy the coastal breeze." />
+    </item>
+    <item id="4" name="Canyon Trail" description="Discover the wonders of a canyon with its impressive rock formations, river walks, and hidden caves. This hard trail offers an adventurous and immersive experience." rating="4.6" difficulty="hard">
+        <phase name="Start" description="Starting point of the trail, providing information and tips for canyon hiking." />
+        <phase name="Canyon Rim" description="Walking along the rim of the canyon, with breathtaking views of the canyon below." />
+        <phase name="Canyon Descent" description="Descending into the canyon, a challenging trek with steep paths and switchbacks." />
+        <phase name="River Walk" description="Walking along the canyon river, with opportunities to cool off and enjoy the water." />
+        <phase name="Cave Exploration" description="Exploring hidden caves within the canyon, a thrilling experience with unique geological features." />
+        <phase name="Rock Climb" description="A short rock climbing section, adding an element of adventure and challenge." />
+        <phase name="Canyon Ascent" description="Climbing out of the canyon, a demanding task that rewards with stunning views at the top." />
+        <phase name="Finish" description="End of the trail, where hikers can rest and reflect on their canyon adventure." />
+    </item>
+    <item id="5" name="Meadow Trail" description="Enjoy a serene walk through meadows filled with wildflowers, gentle streams, and abundant wildlife. This easy trail is perfect for a peaceful and relaxing hike." rating="4.1" difficulty="easy">
+        <phase name="Start" description="Starting point of the trail, where hikers can get information about the meadow and its ecosystem." />
+        <phase name="Wildflower Fields" description="Walking through fields of wildflowers, with vibrant colors and a pleasant fragrance." />
+        <phase name="Stream Crossing" description="Crossing a gentle stream, adding a touch of adventure and tranquility." />
+        <phase name="Butterfly Garden" description="A section of the trail known for attracting butterflies, offering a magical experience." />
+        <phase name="Wildlife Watching" description="Spotting wildlife, with opportunities to see birds, deer, and other meadow inhabitants." />
+        <phase name="Rest Spot" description="A shaded rest spot with benches, ideal for taking a break and enjoying the peaceful surroundings." />
+        <phase name="Meadow Viewpoint" description="A designated viewpoint overlooking the entire meadow, perfect for photography and relaxation." />
+        <phase name="Finish" description="End of the trail, where hikers can unwind and reflect on their serene journey." />
+    </item>
 </trails>

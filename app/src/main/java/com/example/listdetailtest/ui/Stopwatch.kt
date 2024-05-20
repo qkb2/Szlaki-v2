@@ -33,7 +33,8 @@ fun Stopwatch() {
     var job by remember { mutableStateOf<Job?>(null) }
     val recordedTimes = remember { mutableStateListOf<Int>() }
 
-    // TODO: make it so that recorded times are loaded from db
+    // TODO: make it so that recorded times are loaded from view model
+    // TODO: make it so that scope for timer is at app level
 
     Column(
         modifier = Modifier
@@ -78,7 +79,6 @@ fun Stopwatch() {
                 isRunning = false
                 job?.cancel()
                 elapsedSeconds = 0
-                recordedTimes.clear()
             }) {
                 Text(text = "Reset")
             }
