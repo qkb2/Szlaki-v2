@@ -23,10 +23,10 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -170,52 +170,75 @@ fun AppBar(
     scroll behavior as its argument and only generates an image if > 0.5 or sth
     This should be stacked in a box with app bar and passed as app bar to top app bar in scaffold
      */
-    LargeTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        title = {
-            val height = 400.dp
-            if (scrollBehavior.state.collapsedFraction > 0.5) {
+
+    val height = 400.dp
+    if (scrollBehavior.state.collapsedFraction > 0.5) {
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.primary,
+            ),
+            title = {
                 Text(
                     text = trail.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .height(height)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.BottomStart
-                ) {
-                    Image(
-                        painter = painterResource(photoList[trail.id]),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
+            },
+            navigationIcon = {
+                IconButton(onClick = { onHamburgerClick() }) {
+                    Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                }
+            },
+            actions = {
+                IconButton(onClick = { onNightModeClick() }) {
+                    Icon(Icons.Filled.CheckCircle, contentDescription = "Light/Dark Mode")
+                }
+            },
+            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        )
+    } else {
+        Box(
+            modifier = Modifier
+                .height(height)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomStart
+        ) {
+            Image(
+                painter = painterResource(photoList[trail.id]),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
                     Text(
                         text = trail.name,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         color = Color.White
                     )
-                }
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = { onHamburgerClick() }) {
-                Icon(Icons.Filled.Menu, contentDescription = "Menu")
-            }
-        },
-        actions = {
-            IconButton(onClick = { onNightModeClick() }) {
-                Icon(Icons.Filled.CheckCircle, contentDescription = "Light/Dark Mode")
-            }
-        },
-        scrollBehavior = scrollBehavior
-    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onHamburgerClick() }) {
+                        Icon(Icons.Filled.Menu,
+                            contentDescription = "Menu", tint = Color.White)
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { onNightModeClick() }) {
+                        Icon(Icons.Filled.CheckCircle,
+                            contentDescription = "Light/Dark Mode", tint = Color.White)
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    }
 }
