@@ -222,7 +222,8 @@ fun AppBar(
                         text = trail.name,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = Color.White
+                        color = Color.White,
+                        style = MaterialTheme.typography.headlineLarge
                     )
                 },
                 navigationIcon = {
