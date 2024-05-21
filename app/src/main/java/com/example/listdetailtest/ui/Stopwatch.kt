@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -21,20 +22,30 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.listdetailtest.AppDatabase
+import com.example.listdetailtest.RecordedTime
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun Stopwatch() {
+fun Stopwatch(stopwatchId: Int) {
     var isRunning by remember { mutableStateOf(false) }
     var elapsedSeconds by remember { mutableIntStateOf(0) }
     var job by remember { mutableStateOf<Job?>(null) }
-    val recordedTimes = remember { mutableStateListOf<Int>() }
+    val recordedTimes = remember { mutableStateListOf<RecordedTime>() }
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val db = AppDatabase.getDatabase(context)
+    val recordedTimeDao = db.recordedTimeDao()
 
-    // TODO: make it so that recorded times are loaded from view model
-    // TODO: make it so that scope for timer is at app level
+    LaunchedEffect(stopwatchId) {
+        recordedTimes.clear()
+        val times = recordedTimeDao.getTimesForStopwatch(stopwatchId)
+        recordedTimes.addAll(times)
+    }
 
     Column(
         modifier = Modifier
@@ -43,8 +54,6 @@ fun Stopwatch() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val coroutineScope = rememberCoroutineScope()
-
         Text(text = formatTime(elapsedSeconds), style = MaterialTheme.typography.displayMedium)
         Spacer(modifier = Modifier.height(16.dp))
         Row {
@@ -69,8 +78,11 @@ fun Stopwatch() {
             Button(onClick = {
                 isRunning = false
                 job?.cancel()
-                recordedTimes.add(elapsedSeconds)
-                elapsedSeconds = 0
+                coroutineScope.launch {
+                    recordedTimeDao.insert(RecordedTime(stopwatchId = stopwatchId, timeInSeconds = elapsedSeconds))
+                    recordedTimes.add(RecordedTime(stopwatchId = stopwatchId, timeInSeconds = elapsedSeconds))
+                    elapsedSeconds = 0
+                }
             }) {
                 Text(text = "Save Time")
             }
@@ -87,7 +99,7 @@ fun Stopwatch() {
         Text("Recorded Times:")
         Column {
             recordedTimes.forEachIndexed { index, time ->
-                Text("$index: ${formatTime(time)}")
+                Text("$index: ${formatTime(time.timeInSeconds)}")
             }
         }
     }

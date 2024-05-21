@@ -152,7 +152,7 @@ fun DetailsCard(trail: Trail, paddingValues: PaddingValues) {
             )
         }
         Spacer(Modifier.size(8.dp))
-        Stopwatch()
+        Stopwatch(trail.id)
     }
 }
 
