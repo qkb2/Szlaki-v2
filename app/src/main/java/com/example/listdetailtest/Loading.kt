@@ -35,7 +35,7 @@ fun LoadingAnimation() {
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.szlak), // Replace with your loading icon resource
+            painter = painterResource(id = R.drawable.szlak),
             contentDescription = "Loading",
             modifier = Modifier
                 .size(512.dp)

@@ -4,8 +4,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -45,7 +45,6 @@ fun ListDetailPaneScaffoldFull(
     val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
 
     BackHandler(navigator.canNavigateBack()) {
-        // TODO: funny atypical back handler (probably won't do that one)
         navigator.navigateBack()
     }
 
@@ -63,7 +62,7 @@ fun ListDetailPaneScaffoldFull(
             drawerContent = {
                 ModalDrawerSheet {
                     Text("Trails", modifier = Modifier.padding(16.dp))
-                    Divider()
+                    HorizontalDivider()
 
                     items.forEachIndexed { _, trail ->
                         NavigationDrawerItem(

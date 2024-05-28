@@ -165,7 +165,7 @@ fun AppBar(
     onNightModeClick: () -> Unit) {
 
     /*
-    TODO: fix app bar to have properly overlaying image of greater size
+    DONE: fix app bar to have properly overlaying image of greater size
     Probably should be done by treating photo as its own element that takes
     scroll behavior as its argument and only generates an image if > 0.5 or sth
     This should be stacked in a box with app bar and passed as app bar to top app bar in scaffold
